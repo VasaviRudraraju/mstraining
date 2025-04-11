@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+spec:
+  selector: 
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*.elb.amazonaws.com"
+  - port: 
+      number: 443
+      name: https 
+      protocol: HTTPS 
+    hosts:
+    - "*.elb.amazonaws.com"
+    tls:
+      mode: SIMPLE
+      credentialName: gateway-cert-aws-elb-dns
+  - port: 
+      number: 443
+      name: https-sni
+      protocol: HTTPS 
+    hosts:
+    - "*.sni.com"
+    tls:
+      mode: SIMPLE
+      credentialName: gateway-cert-sni-dns
